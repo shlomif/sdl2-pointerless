@@ -408,8 +408,8 @@ bool init_grid(Grid* grid)
                     SDL_Rect rect;
                     rect.x=x;
                     rect.y=y;
-                    rect.w=1;
-                    rect.h=1;
+                    rect.w=100;
+                    rect.h=100;
                         // Render filled cell
     SDL_RenderFillRect(renderer, &(rect));
 }
@@ -455,6 +455,7 @@ void render_grid(Grid* grid, SDL_Renderer* renderer)
         SDL_RenderFillRect(renderer, &(grid->rect));
     }
 
+    return;
     // Render all cells
     for(int i = 0; i < grid->x_cells; ++i)
     {
@@ -1883,7 +1884,7 @@ void draw(int x_cells, int y_cells)
             y_acc_y_pos += y_y_offset;
             y_acc_x_pos += y_x_offset;
         }
-    delay(500);
+    delay(10);
     }
 
 #if 0
