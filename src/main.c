@@ -1,4 +1,12 @@
 ﻿
+/*
+ * I use:
+ *
+ * gcc -DSDLVER=2 -O3 -march=native -Wall -Wextra `pkg-config --cflags --libs sdl2` src/main.c -lm
+ *
+ *
+ * to build
+ * */
 // Define screen dimensions
 #define SCREEN_WIDTH        (800)
 #define SCREEN_HEIGHT       (600)
