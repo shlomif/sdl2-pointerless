@@ -1876,7 +1876,6 @@ void draw(int x_cells, int y_cells)
                     this_y_height,
                     pen_color
                 );
-#undef screen
 
 
                 y_x_acc_degree = DEG_MOD(y_x_acc_degree+x_amp_delta);
@@ -1889,12 +1888,13 @@ void draw(int x_cells, int y_cells)
             y_acc_y_pos += y_y_offset;
             y_acc_x_pos += y_x_offset;
         }
-    delay(10);
-    }
-
+    delay(100);
 #if 0
         SDL_UpdateRects(screen, x_num_points*y_num_points, rects);
 #endif
+#undef screen
+    }
+
     delay(500);
 
     set_cell_color(2, 1, COLOR_RED);
