@@ -1860,9 +1860,13 @@ void draw(int x_cells, int y_cells)
                 /* I don't need to lock the screen, so I'm omitting it */
 
 #define screen g_renderer
+#if 1
+#define fill_color COLOR_BLACK
+#define pen_color  COLOR_WHITE
+#else
 #define fill_color COLOR_WHITE
 #define pen_color  COLOR_BLACK
-
+#endif
                 putpixel(
                     screen,
                     x_pos,
@@ -1888,7 +1892,8 @@ void draw(int x_cells, int y_cells)
             y_acc_y_pos += y_y_offset;
             y_acc_x_pos += y_x_offset;
         }
-    delay(100);
+        prev_t = t;
+        delay(100);
 #if 0
         SDL_UpdateRects(screen, x_num_points*y_num_points, rects);
 #endif
