@@ -391,26 +391,30 @@ bool init_grid(Grid* grid)
     return true;
 }
 
-                static void putpixel(
-                    SDL_Renderer* renderer,
-                    int x,
-                    int y,
-                    SDL_Color color
-                    )
+static void putpixel(
+    SDL_Renderer* renderer,
+    int x,
+    int y,
+    SDL_Color color
+)
 {
     // Set renderer color to cell color
     SDL_SetRenderDrawColor(renderer,
-                           color.r,
-                           color.g,
-                           color.b,
-                           color.a);
+        color.r,
+        color.g,
+        color.b,
+        color.a);
 
-                    SDL_Rect rect;
-                    rect.x=x;
-                    rect.y=y;
-                    rect.w=100;
-                    rect.h=100;
-                        // Render filled cell
+    SDL_Rect rect;
+    rect.x=x;
+    rect.y=y;
+    rect.w=1;
+    rect.h=1;
+#ifdef DEBUG
+    printf("putpixel[x=%d , y=%d]\n", x, y);
+    fflush(stdout);
+#endif
+    // Render filled cell
     SDL_RenderFillRect(renderer, &(rect));
 }
 
@@ -1450,12 +1454,13 @@ void delay(SDL_Renderer* renderer, Uint32 ms, SDL_Event* event)
 
 bool render_and_delay(SDL_Renderer* renderer, Grid* grid, SDL_Color background_color, Uint32 ms, SDL_Event* event)
 {
+#if 0
     // Set white background
     set_background_color(renderer, background_color);
 
     // Render grid
     render_grid(grid, renderer);
-
+#endif
     // Wait
     delay(renderer, ms, event);
 
