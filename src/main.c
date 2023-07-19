@@ -1516,8 +1516,10 @@ bool start(SDL_Renderer* renderer, int width, int height)
     set_background_color(renderer, g_background_color);
     g_grid.background_color = g_background_color;
 
+#if 0
     // Render grid
     render_grid(&g_grid, renderer);
+#endif
 
     // Update screen
     SDL_RenderPresent(renderer);
