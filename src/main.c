@@ -1788,8 +1788,10 @@ void draw(int x_cells, int y_cells)
     int y_acc_degree, y_x_acc_degree;
     int prev_y_acc_degree, prev_y_x_acc_degree;
     int y_acc_y_pos, y_acc_x_pos;
+#ifdef WITH_RECTS
     SDL_Rect * rects;
     SDL_Rect * the_rect;
+#endif
 #define PI 3.14159265358
     int a;
 
@@ -1798,6 +1800,7 @@ void draw(int x_cells, int y_cells)
         sin_lookup[a] = (int)(sin((2*PI/DEGREES_RANGE)*a)*y_amplitude);
     }
 
+#ifdef WITH_RECTS
     rects = (SDL_Rect *)malloc(sizeof(rects[0]) * x_num_points*y_num_points);
     for(a=0;a<x_num_points*y_num_points;a++)
     {
@@ -1825,6 +1828,7 @@ void draw(int x_cells, int y_cells)
         }
         y_acc_x_pos += y_x_offset;
     }
+#endif
 
 #if 0
     {
@@ -1840,7 +1844,9 @@ void draw(int x_cells, int y_cells)
     prev_t = 0;
     for(t=1 ; mycont ; t = ((t+1)&(DEGREES_RANGE-1)))
     {
+#ifdef WITH_RECTS
         the_rect = rects;
+#endif
 
         y_acc_degree = t;
         prev_y_acc_degree = prev_t;
@@ -1864,8 +1870,10 @@ void draw(int x_cells, int y_cells)
                     sin_lookup[y_x_acc_degree]
                     ;
 
+#ifdef WITH_RECTS
                 the_rect->y = min(prev_y_height,this_y_height);
                 the_rect++;
+#endif
 
                 /* I don't need to lock the screen, so I'm omitting it */
 
