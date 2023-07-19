@@ -1893,7 +1893,7 @@ void draw(int x_cells, int y_cells)
             y_acc_x_pos += y_x_offset;
         }
         prev_t = t;
-        delay(100);
+        delay(10);
 #if 0
         SDL_UpdateRects(screen, x_num_points*y_num_points, rects);
 #endif
