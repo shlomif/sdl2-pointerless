@@ -18,7 +18,7 @@
 #define GRID_DEFAULT_MARGIN         (20)
 #define GRID_DEFAULT_COLOR          COLOR_WHITE
 #define GRID_DEFAULT_BORDER_SIZE    (2)
-#define GRID_DEFAULT_BORDER_COLOR   COLOR_GRAY
+#define GRID_DEFAULT_BORDER_COLOR   COLOR_WHITE
 
 #define USE_AZERTY_KEYBOARD         0
 
@@ -125,7 +125,6 @@
 #define _COLOR(RED, GREEN, BLUE)    { RED, GREEN, BLUE, 0xFF }
 #define COLOR(RED, GREEN, BLUE)     ((SDL_Color) { RED, GREEN, BLUE, 0xFF })
 
-const SDL_Color NO_COLOR            = {0, 0, 0, 0};
 const SDL_Color COLOR_BLACK         = _COLOR(0, 0, 0);
 const SDL_Color COLOR_WHITE         = _COLOR(0xFF, 0xFF, 0xFF);
 const SDL_Color COLOR_GRAY          = _COLOR(0x64, 0x64, 0x64);
@@ -138,6 +137,7 @@ const SDL_Color COLOR_YELLOW        = _COLOR(0xF7, 0xDC, 0x11);
 const SDL_Color COLOR_ORANGE        = _COLOR(0xFF, 0x85, 0);
 const SDL_Color COLOR_PINK          = _COLOR(0xFF, 0, 0xCE);
 const SDL_Color COLOR_VIOLET        = _COLOR(0x91, 0, 0xFF);
+const SDL_Color NO_COLOR            = COLOR_WHITE;
 
 enum
 {
@@ -454,7 +454,7 @@ void render_cell(Cell* cell, SDL_Renderer* renderer)
 
 void render_grid(Grid* grid, SDL_Renderer* renderer)
 {
-    if(grid->border != 0) // Grid border thickness different from 0
+    if(true || grid->border != 0) // Grid border thickness different from 0
     {
         // Set renderer color to draw the grid border
         SDL_SetRenderDrawColor(renderer,
@@ -1485,6 +1485,9 @@ void draw(int x_cells, int y_cells);
 
 bool start(SDL_Renderer* renderer, int width, int height)
 {
+    g_grid.background_color = g_background_color;
+    g_grid.border_color = g_background_color;
+
     // Init global renderer
     g_renderer = renderer;
 
@@ -1878,7 +1881,7 @@ void draw(int x_cells, int y_cells)
                 /* I don't need to lock the screen, so I'm omitting it */
 
 #define screen g_renderer
-#if 1
+#if 0
 #define fill_color COLOR_BLACK
 #define pen_color  COLOR_WHITE
 #else
