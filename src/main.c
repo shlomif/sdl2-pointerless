@@ -1485,7 +1485,7 @@ bool render_and_delay(SDL_Renderer* renderer, Grid* grid, SDL_Color background_c
 // Global variables
 SDL_Renderer* g_renderer = NULL;
 Grid g_grid = {0};
-SDL_Color g_background_color = COLOR_WHITE;
+const SDL_Color g_background_color = COLOR_WHITE;
 SDL_Event g_event = {0};
 
 void draw(int x_cells, int y_cells);
