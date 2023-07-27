@@ -321,13 +321,19 @@ struct Grid
 };
 typedef struct Grid Grid;
 
+static void set_color(SDL_Renderer* renderer, SDL_Color color)
+{
+    // Initialize renderer color
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+}
+
 void set_background_color(SDL_Renderer* renderer, SDL_Color color)
 {
     // Initialize renderer color
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 
     // Clear screen
-    SDL_RenderClear(renderer);
+    // SDL_RenderClear(renderer);
 }
 
 int random_int(int min, int max)
@@ -418,6 +424,7 @@ static void putpixel(
     rect.y=y;
     rect.w=1;
     rect.h=1;
+// #define DEBUG
 #ifdef DEBUG
     printf("putpixel[x=%d , y=%d]\n", x, y);
     fflush(stdout);
@@ -454,7 +461,7 @@ void render_cell(Cell* cell, SDL_Renderer* renderer)
 
 void render_grid(Grid* grid, SDL_Renderer* renderer)
 {
-    if(true || grid->border != 0) // Grid border thickness different from 0
+//    if(grid->border != 0) // Grid border thickness different from 0
     {
         // Set renderer color to draw the grid border
         SDL_SetRenderDrawColor(renderer,
@@ -1490,6 +1497,7 @@ bool start(SDL_Renderer* renderer, int width, int height)
 
     // Init global renderer
     g_renderer = renderer;
+    set_background_color(renderer, g_background_color);
 
     // Set number of cells
     g_grid.x_cells = GRID_MAX_X_CELLS;
@@ -1499,15 +1507,15 @@ bool start(SDL_Renderer* renderer, int width, int height)
     int margin = GRID_DEFAULT_MARGIN;
     int cell_size = min( (width - margin * 2) / g_grid.x_cells,
                          (height - margin * 2) / g_grid.y_cells );
-    g_grid.rect.w = cell_size * g_grid.x_cells;
-    g_grid.rect.h = cell_size * g_grid.y_cells;
+    g_grid.rect.w = width; //cell_size * g_grid.x_cells;
+    g_grid.rect.h = height; // cell_size * g_grid.y_cells;
 
     // Set grid backgroud
     g_grid.background_color = GRID_DEFAULT_COLOR;
 
     // Set grid border thickness and color
     g_grid.border = GRID_DEFAULT_BORDER_SIZE;
-    g_grid.border_color = GRID_DEFAULT_BORDER_COLOR;
+   // g_grid.border_color = GRID_DEFAULT_BORDER_COLOR;
 
     // Set cells border thickness and color
     g_grid.cells_border = g_grid.border;
@@ -1527,7 +1535,11 @@ bool start(SDL_Renderer* renderer, int width, int height)
     set_background_color(renderer, g_background_color);
     g_grid.background_color = g_background_color;
 
-#if 0
+    g_grid.rect.x = 0; //cell_size * g_grid.x_cells;
+    g_grid.rect.y = 0; //cell_size * g_grid.x_cells;
+    g_grid.rect.w = width; //cell_size * g_grid.x_cells;
+    g_grid.rect.h = height; // cell_size * g_grid.y_cells;
+#if 1
     // Render grid
     render_grid(&g_grid, renderer);
 #endif
@@ -1902,6 +1914,10 @@ void draw(int x_cells, int y_cells)
                     pen_color
                 );
 
+                set_color(
+                    screen,
+                    fill_color
+                );
 
                 y_x_acc_degree = DEG_MOD(y_x_acc_degree+x_amp_delta);
                 prev_y_x_acc_degree = DEG_MOD(prev_y_x_acc_degree+x_amp_delta);
@@ -1918,6 +1934,7 @@ void draw(int x_cells, int y_cells)
 #if 0
         SDL_UpdateRects(screen, x_num_points*y_num_points, rects);
 #endif
+        // SDL_RenderPresent(g_renderer);
 #undef screen
     }
 
