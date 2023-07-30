@@ -1467,12 +1467,20 @@ void delay(SDL_Renderer* renderer, Uint32 ms, SDL_Event* event)
     }
 }
 
+static int counter = 0;
 bool render_and_delay(SDL_Renderer* renderer, Grid* grid, SDL_Color background_color, Uint32 ms, SDL_Event* event)
 {
-#if 0
-    // Set white background
-    set_background_color(renderer, background_color);
+#if 1
+    if (! counter)
+    {
+        ++counter;
+        // Set white background
+        set_background_color(renderer, background_color);
+        SDL_RenderClear(renderer);
+    }
+#endif
 
+#if 0
     // Render grid
     render_grid(grid, renderer);
 #endif
@@ -1487,6 +1495,12 @@ SDL_Renderer* g_renderer = NULL;
 Grid g_grid = {0};
 const SDL_Color g_background_color = COLOR_WHITE;
 SDL_Event g_event = {0};
+
+void flagsetbg(SDL_Renderer* renderer)
+{
+    set_background_color(renderer, g_background_color);
+    SDL_RenderClear(renderer);
+}
 
 void draw(int x_cells, int y_cells);
 
@@ -1590,8 +1604,10 @@ bool start(SDL_Renderer* renderer, int width, int height)
     return true;
 }
 
+#if 0
 #define set_background_color(color)                 (g_background_color = color)
 #define get_background_color()                      (g_background_color)
+#endif
 #define set_cell_color(x, y, color)                 set_cell_color(&g_grid, x, y, color)
 #define get_cell_color(x, y)                        get_cell_color(&g_grid, x, y)
 #define set_cell_border_color(x, y, color)          set_cell_border_color(&g_grid, x, y, color)
