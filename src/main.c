@@ -1934,6 +1934,7 @@ void draw(int x_cells, int y_cells)
                     screen,
                     fill_color
                 );
+                set_background_color(g_renderer, g_grid.background_color);
 
                 y_x_acc_degree = DEG_MOD(y_x_acc_degree+x_amp_delta);
                 prev_y_x_acc_degree = DEG_MOD(prev_y_x_acc_degree+x_amp_delta);
