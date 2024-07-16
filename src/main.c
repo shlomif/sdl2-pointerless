@@ -426,7 +426,7 @@ static void putpixel(
     rect.h=1;
 // #define DEBUG
 #ifdef DEBUG
-    printf("putpixel[x=%d , y=%d]\n", x, y);
+    fprintf(stdout, "putpixel[x=%d , y=%d]\n", x, y);
     fflush(stdout);
 #endif
     // Render filled cell
@@ -507,24 +507,6 @@ void center_grid(Grid* grid, int screen_width, int screen_height)
 {
     grid->rect.x = (screen_width - grid->rect.w) / 2;
     grid->rect.y = (screen_height - grid->rect.h) / 2;
-}
-
-void set_cell_color(Grid* grid, int x, int y, SDL_Color color)
-{
-    if (x >= 0 && x < grid->x_cells && y >= 0 && y < grid->y_cells)
-    {
-        grid->cells[x][y].rect_color = color;
-    }
-}
-
-SDL_Color get_cell_color(Grid* grid, int x, int y)
-{
-    if (x >= 0 && x < grid->x_cells && y >= 0 && y < grid->y_cells)
-    {
-        return grid->cells[x][y].rect_color;
-    }
-
-    return NO_COLOR;
 }
 
 void set_cell_border_color(Grid* grid, int x, int y, SDL_Color color)
@@ -1190,23 +1172,6 @@ const uint8_t FONT_PIXELS[] =
     0x08,  // ░░░░▓░░░
 };
 
-void draw_font(Grid* grid,  size_t font_index, int at_x, int at_y, SDL_Color color)
-{
-    for (int x = 0; x < 4 && at_x + x < grid->x_cells; ++x)
-    {
-        const size_t k = font_index + x;
-        for (int y = 0; y < 6 && at_y + y < grid->y_cells; ++y)
-        {
-            set_cell_color(
-                grid,
-                at_x + x,
-                at_y + y,
-                (FONT_PIXELS[k] & (1 << y)) ? color : grid->background_color
-            );
-        }
-    }
-}
-
 SDL_Keycode get_key(SDL_Event* event)
 {
     if (event->type == SDL_KEYDOWN)
@@ -1561,8 +1526,6 @@ bool start(SDL_Renderer* renderer, int width, int height)
 #define set_background_color(color)                 (g_background_color = color)
 #define get_background_color()                      (g_background_color)
 #endif
-#define set_cell_color(x, y, color)                 set_cell_color(&g_grid, x, y, color)
-#define get_cell_color(x, y)                        get_cell_color(&g_grid, x, y)
 #define set_cell_border_color(x, y, color)          set_cell_border_color(&g_grid, x, y, color)
 #define get_cell_border_color(x, y)                 get_cell_border_color(&g_grid, x, y)
 #define set_grid_color(color)                       set_grid_color(&g_grid, color)
@@ -1578,7 +1541,6 @@ bool start(SDL_Renderer* renderer, int width, int height)
 #define get_mouse_pos_y()                           get_mouse_pos_y(&g_grid, &g_event)
 #define get_mouse_button()                          get_mouse_button(&g_grid, &g_event)
 #define exit()                                      exit(0)
-#define printf(...)                                 (fprintf (stdout, __VA_ARGS__), fflush(stdout))
 
 //***************************************************************************************
 // DOCUMENTATION
@@ -1593,9 +1555,6 @@ bool start(SDL_Renderer* renderer, int width, int height)
 //
 //      get_background_color()
 //          Get the current background color
-//
-//      set_cell_color(x, y, color)
-//          Set the color of the cell at coordinates (x, y)
 //
 //      get_cell_color(x, y)
 //          Get the current color of the cell at coordinates (x, y)
@@ -1790,7 +1749,8 @@ static void draw()
     }
 
 #if 0
-    printf("%i\n", SDL_MUSTLOCK(screen));
+    fprintf(stdout, "%d\n", SDL_MUSTLOCK(screen));
+    fflush(stdout);
 #endif
 
     /*
