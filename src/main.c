@@ -15,7 +15,6 @@
 #define GRID_MAX_X_CELLS    (10)
 #define GRID_MAX_Y_CELLS    (10)
 
-#define GRID_DEFAULT_MARGIN         (20)
 #define GRID_DEFAULT_COLOR          COLOR_WHITE
 #define GRID_DEFAULT_BORDER_SIZE    (2)
 #define GRID_DEFAULT_BORDER_COLOR   COLOR_WHITE
@@ -198,11 +197,6 @@ SDL_Keycode normalize_key(SDL_Keycode key)
     }
 
     return key;
-}
-
-bool is_key_ascii(SDL_Keycode key)
-{
-    return key >= SDLK_SPACE && key <= SDLK_z;
 }
 
 bool is_key_letter(SDL_Keycode key)
@@ -797,9 +791,6 @@ bool start(SDL_Renderer* renderer, int width, int height)
 //      get_key()
 //          Get the pressed key
 //
-//      is_key_ascii(key)
-//          Check if a key is an ASCII-based character
-//
 //      is_key_letter(key)
 //          Check if a key is a letter
 //
@@ -892,12 +883,12 @@ bool start(SDL_Renderer* renderer, int width, int height)
 static bool mycont = true;
 static void draw()
 {
-    int x_num_points = 20;
-    int y_num_points = 10;
-    int x_x_offset = 20;
-    int x_y_offset = 0;
-    int y_x_offset = 3;
-    int y_y_offset = 10;
+    const int x_num_points = 20;
+    const int y_num_points = 10;
+    const int x_x_offset = 20;
+    const int x_y_offset = 0;
+    const int y_x_offset = 3;
+    const int y_y_offset = 10;
     double y_amplitude = 10.0;
     int y_amp_delta = 50;
     int x_amp_delta = 20;
@@ -1005,14 +996,9 @@ static void draw()
                 /* I don't need to lock the screen, so I'm omitting it */
 
 #define screen g_renderer
-#if 1
 // #error right
 #define fill_color COLOR_BLACK
 #define pen_color  COLOR_WHITE
-#else
-#define fill_color COLOR_WHITE
-#define pen_color  COLOR_BLACK
-#endif
                 putpixel(
                     screen,
                     x_pos,
