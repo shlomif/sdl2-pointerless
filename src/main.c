@@ -1945,7 +1945,7 @@ static void draw()
             y_acc_x_pos += y_x_offset;
         }
         prev_t = t;
-        delay(10);
+        delay(1);
 #if 0
         SDL_UpdateRects(screen, x_num_points*y_num_points, rects);
 #endif
