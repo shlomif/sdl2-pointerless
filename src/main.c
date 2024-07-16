@@ -797,16 +797,6 @@ bool start(SDL_Renderer* renderer, int width, int height)
 //      get_key()
 //          Get the pressed key
 //
-//      draw_key(key, at_x, at_y, color)
-//          Write a key at position (at_x, at_y) with a specific color
-//
-//      draw_char(c, at_x, at_y, color)
-//          Write a character at position (at_x, at_y) with a specific color
-//
-//      draw_text(text, at_x, at_y, space, color)
-//          Write a text at position (at_x, at_y) with a specific color
-//          The space parameter represents the spacing between characters
-//
 //      is_key_ascii(key)
 //          Check if a key is an ASCII-based character
 //
