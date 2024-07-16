@@ -1493,7 +1493,7 @@ bool render_and_delay(SDL_Renderer* renderer, Grid* grid, SDL_Color background_c
 // Global variables
 SDL_Renderer* g_renderer = NULL;
 Grid g_grid = {0};
-const SDL_Color g_background_color = COLOR_WHITE;
+const SDL_Color g_background_color = COLOR_BLACK;
 SDL_Event g_event = {0};
 
 void flagsetbg(SDL_Renderer* renderer)
