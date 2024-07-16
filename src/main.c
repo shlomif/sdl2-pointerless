@@ -1909,7 +1909,8 @@ void draw(int x_cells, int y_cells)
                 /* I don't need to lock the screen, so I'm omitting it */
 
 #define screen g_renderer
-#if 0
+#if 1
+// #error right
 #define fill_color COLOR_BLACK
 #define pen_color  COLOR_WHITE
 #else
