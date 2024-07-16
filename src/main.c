@@ -1502,7 +1502,7 @@ void flagsetbg(SDL_Renderer* renderer)
     SDL_RenderClear(renderer);
 }
 
-void draw(int x_cells, int y_cells);
+static void draw();
 
 bool start(SDL_Renderer* renderer, int width, int height)
 {
@@ -1559,7 +1559,7 @@ bool start(SDL_Renderer* renderer, int width, int height)
     SDL_RenderPresent(renderer);
 
     // Draw shapes
-    draw(g_grid.x_cells, g_grid.y_cells);
+    draw();
 
     // Set white background
     set_background_color(renderer, g_background_color);
@@ -1792,7 +1792,7 @@ bool start(SDL_Renderer* renderer, int width, int height)
 #define DEG_MOD(x) ((x)&(DEGREES_RANGE-1))
 
 static bool mycont = true;
-void draw(int x_cells, int y_cells)
+static void draw()
 {
     int x_num_points = 20;
     int y_num_points = 10;
