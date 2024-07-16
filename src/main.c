@@ -1468,7 +1468,7 @@ void delay(SDL_Renderer* renderer, Uint32 ms, SDL_Event* event)
 }
 
 static int counter = 0;
-bool render_and_delay(SDL_Renderer* renderer, Grid* grid, SDL_Color background_color, Uint32 ms, SDL_Event* event)
+bool render_and_delay(SDL_Renderer* renderer, SDL_Color background_color, Uint32 ms, SDL_Event* event)
 {
 #if 1
     if (! counter)
@@ -1518,11 +1518,8 @@ bool start(SDL_Renderer* renderer, int width, int height)
     g_grid.y_cells = GRID_MAX_Y_CELLS;
 
     // Set grid dimensions
-    int margin = GRID_DEFAULT_MARGIN;
-    int cell_size = min( (width - margin * 2) / g_grid.x_cells,
-                         (height - margin * 2) / g_grid.y_cells );
-    g_grid.rect.w = width; //cell_size * g_grid.x_cells;
-    g_grid.rect.h = height; // cell_size * g_grid.y_cells;
+    g_grid.rect.w = width;
+    g_grid.rect.h = height;
 
     // Set grid backgroud
     g_grid.background_color = GRID_DEFAULT_COLOR;
@@ -1549,10 +1546,10 @@ bool start(SDL_Renderer* renderer, int width, int height)
     set_background_color(renderer, g_background_color);
     g_grid.background_color = g_background_color;
 
-    g_grid.rect.x = 0; //cell_size * g_grid.x_cells;
-    g_grid.rect.y = 0; //cell_size * g_grid.x_cells;
-    g_grid.rect.w = width; //cell_size * g_grid.x_cells;
-    g_grid.rect.h = height; // cell_size * g_grid.y_cells;
+    g_grid.rect.x = 0;
+    g_grid.rect.y = 0;
+    g_grid.rect.w = width;
+    g_grid.rect.h = height;
 #if 1
     // Render grid
     render_grid(&g_grid, renderer);
@@ -1616,7 +1613,7 @@ bool start(SDL_Renderer* renderer, int width, int height)
 #define get_grid_color()                            get_grid_color(&g_grid)
 #define set_grid_border_color(color)                set_grid_border_color(&g_grid, color)
 #define get_grid_border_color()                     get_grid_border_color(&g_grid)
-#define delay(ms)                                   render_and_delay(g_renderer, &g_grid, g_background_color, ms, &g_event)
+#define delay(ms)                                   render_and_delay(g_renderer, g_background_color, ms, &g_event)
 #define get_key()                                   get_key(&g_event)
 #define is_mouse_over_grid()                        is_mouse_over_grid(&g_grid)
 #define is_mouse_clicked()                          is_mouse_clicked(&g_grid, &g_event)
