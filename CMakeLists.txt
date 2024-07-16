@@ -26,11 +26,11 @@
 # DEALINGS IN THE SOFTWARE.
 #
 
+# Set the cmake minimum version to 3.9
+cmake_minimum_required(VERSION 3.9)
+
 # Define the project name
 project(sdl2-pointerless)
-
-# Set the cmake minimum version to 3.5.1
-cmake_minimum_required(VERSION 3.5.1)
 
 # Add SDL2 CMake modules
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2)
@@ -49,8 +49,7 @@ target_compile_options(${PROJECT_NAME} PRIVATE $<$<NOT:$<C_COMPILER_ID:MSVC>>:-W
 
 # Add SDL2 library
 find_package(SDL2 REQUIRED)
-target_link_libraries(${PROJECT_NAME} SDL2::Main)
-
+target_link_libraries(${PROJECT_NAME} SDL2::Main "m" "pthread")
 # Add SDL2_image library
 #find_package(SDL2_image REQUIRED)
 #target_link_libraries(${PROJECT_NAME} SDL2::Image)
