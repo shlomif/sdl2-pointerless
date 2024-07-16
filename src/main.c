@@ -564,58 +564,6 @@ bool is_mouse_moved(Grid* grid, SDL_Event* event)
     return false;
 }
 
-int get_mouse_pos_x(Grid* grid, SDL_Event* event)
-{
-    if (is_mouse_clicked(grid, event))
-    {
-        int x = event->button.x;
-        return (x - grid->rect.x) / (grid->rect.w / grid->x_cells);
-    }
-    else if(is_mouse_moved(grid, event))
-    {
-        int x = event->motion.x;
-        return (x - grid->rect.x) / (grid->rect.w / grid->x_cells);
-    }
-    else
-    {
-        int x, y;
-        SDL_GetMouseState(&x, &y);
-
-        if(_is_mouse_over_grid(grid, x, y))
-        {
-            return (x - grid->rect.x) / (grid->rect.w / grid->x_cells);
-        }
-    }
-
-    return -1;
-}
-
-int get_mouse_pos_y(Grid* grid, SDL_Event* event)
-{
-    if (is_mouse_clicked(grid, event))
-    {
-        int y = event->button.y;
-        return (y - grid->rect.y) / (grid->rect.h / grid->y_cells);
-    }
-    else if(is_mouse_moved(grid, event))
-    {
-        int y = event->motion.y;
-        return (y - grid->rect.y) / (grid->rect.h / grid->y_cells);
-    }
-    else
-    {
-        int x, y;
-        SDL_GetMouseState(&x, &y);
-
-        if(_is_mouse_over_grid(grid, x, y))
-        {
-            return (y - grid->rect.y) / (grid->rect.h / grid->y_cells);
-        }
-    }
-
-    return -1;
-}
-
 Uint8 get_mouse_button(Grid* grid, SDL_Event* event)
 {
     if (is_mouse_clicked(grid, event))
@@ -874,8 +822,6 @@ bool start(SDL_Renderer* renderer, int width, int height)
 #define is_mouse_over_grid()                        is_mouse_over_grid(&g_grid)
 #define is_mouse_clicked()                          is_mouse_clicked(&g_grid, &g_event)
 #define is_mouse_moved()                            is_mouse_moved(&g_grid, &g_event)
-#define get_mouse_pos_x()                           get_mouse_pos_x(&g_grid, &g_event)
-#define get_mouse_pos_y()                           get_mouse_pos_y(&g_grid, &g_event)
 #define get_mouse_button()                          get_mouse_button(&g_grid, &g_event)
 #define exit()                                      exit(0)
 
@@ -913,12 +859,6 @@ bool start(SDL_Renderer* renderer, int width, int height)
 //
 //      is_mouse_moved()
 //          Check if the mouse was moved (over the grid).
-//
-//      get_mouse_pos_x()
-//          Get the x coordinate of mouse.
-//
-//      get_mouse_pos_y()
-//          Get the y coordinate of mouse.
 //
 //      get_mouse_button()
 //          Get the clicked mouse button (SDL_BUTTON_LEFT, SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT).
