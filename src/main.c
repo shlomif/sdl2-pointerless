@@ -1207,50 +1207,6 @@ void draw_font(Grid* grid,  size_t font_index, int at_x, int at_y, SDL_Color col
     }
 }
 
-void draw_char(Grid* grid, char c, int at_x, int at_y, SDL_Color color)
-{
-    size_t font_index = FONT_PIXELS_UNKNOWN;
-
-    if (c >= ' ' && c <= '~')
-    {
-        font_index = ((c - ' ') * 4) + FONT_PIXELS_PRINTABLE_CHAR;
-    }
-
-    draw_font(grid, font_index, at_x, at_y, color);
-}
-
-void draw_text(Grid* grid, char* text, int at_x, int at_y, int space, SDL_Color color)
-{
-    int cursor_x = at_x;
-    int cursor_y = at_y;
-
-    int i = 0;
-    while(text[i] && cursor_y < grid->y_cells)
-    {
-        draw_char(grid, text[i], cursor_x, cursor_y, color);
-        cursor_x += 4 + space;
-        i++;
-
-        // Word wrap
-        if (cursor_x > grid->x_cells - 4)
-        {
-            cursor_x = at_x;
-            cursor_y += 6 + space;
-
-            // Skip space
-            if (text[i] == ' ')
-                i++;
-        }
-    }
-}
-
-void draw_key(Grid* grid, SDL_Keycode key, int at_x, int at_y, SDL_Color color)
-{
-    char c = key_to_char(key);
-
-    draw_char(grid, c, at_x, at_y, color);
-}
-
 SDL_Keycode get_key(SDL_Event* event)
 {
     if (event->type == SDL_KEYDOWN)
@@ -1622,9 +1578,6 @@ bool start(SDL_Renderer* renderer, int width, int height)
 #define get_mouse_pos_y()                           get_mouse_pos_y(&g_grid, &g_event)
 #define get_mouse_button()                          get_mouse_button(&g_grid, &g_event)
 #define exit()                                      exit(0)
-#define draw_key(key, at_x, at_y, color)            draw_key(&g_grid, key, at_x, at_y, color)
-#define draw_char(c, at_x, at_y, color)             draw_char(&g_grid, c, at_x, at_y, color)
-#define draw_text(text, at_x, at_y, space, color)   draw_text(&g_grid, text, at_x, at_y, space, color)
 #define printf(...)                                 (fprintf (stdout, __VA_ARGS__), fflush(stdout))
 
 //***************************************************************************************
@@ -1952,20 +1905,4 @@ static void draw()
         // SDL_RenderPresent(g_renderer);
 #undef screen
     }
-
-    delay(500);
-
-    set_cell_color(2, 1, COLOR_RED);
-
-    delay(500);
-
-    set_cell_color(2, 3, COLOR_BLUE);
-
-    delay(500);
-
-    set_cell_color(2, 5, COLOR_GREEN);
-
-    delay(500);
-
-    set_cell_color(2, 7, COLOR_YELLOW);
 }
