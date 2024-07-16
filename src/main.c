@@ -524,56 +524,6 @@ SDL_Keycode get_key(SDL_Event* event)
     return SDLK_UNKNOWN;
 }
 
-bool _is_mouse_over_grid(Grid* grid, int x, int y)
-{
-    return x >= grid->rect.x && x <= grid->rect.x + grid->rect.w
-           && y >= grid->rect.y && y <= grid->rect.y + grid->rect.h;
-}
-
-bool is_mouse_over_grid(Grid* grid)
-{
-    int x, y;
-    SDL_GetMouseState(&x, &y);
-
-    return _is_mouse_over_grid(grid, x, y);
-}
-
-bool is_mouse_clicked(Grid* grid, SDL_Event* event)
-{
-    if (event->type == SDL_MOUSEBUTTONDOWN)
-    {
-        int x = event->button.x;
-        int y = event->button.y;
-
-        return _is_mouse_over_grid(grid, x, y);
-    }
-
-    return false;
-}
-
-bool is_mouse_moved(Grid* grid, SDL_Event* event)
-{
-    if (event->type == SDL_MOUSEMOTION)
-    {
-        int x = event->motion.x;
-        int y = event->motion.y;
-
-        return _is_mouse_over_grid(grid, x, y);
-    }
-
-    return false;
-}
-
-Uint8 get_mouse_button(Grid* grid, SDL_Event* event)
-{
-    if (is_mouse_clicked(grid, event))
-    {
-        return event->button.button;
-    }
-
-    return 0;
-}
-
 bool start(SDL_Renderer* renderer, int width, int height);
 
 int main(int argc, char* argv[])
@@ -819,10 +769,6 @@ bool start(SDL_Renderer* renderer, int width, int height)
 #define get_grid_border_color()                     get_grid_border_color(&g_grid)
 #define delay(ms)                                   render_and_delay(g_renderer, g_background_color, ms, &g_event)
 #define get_key()                                   get_key(&g_event)
-#define is_mouse_over_grid()                        is_mouse_over_grid(&g_grid)
-#define is_mouse_clicked()                          is_mouse_clicked(&g_grid, &g_event)
-#define is_mouse_moved()                            is_mouse_moved(&g_grid, &g_event)
-#define get_mouse_button()                          get_mouse_button(&g_grid, &g_event)
 #define exit()                                      exit(0)
 
 //***************************************************************************************
@@ -850,18 +796,6 @@ bool start(SDL_Renderer* renderer, int width, int height)
 //
 //      get_key()
 //          Get the pressed key
-//
-//      is_mouse_over_grid()
-//          Check if the mouse is over the grid.
-//
-//      is_mouse_clicked()
-//          Check if the mouse was clicked (over the grid).
-//
-//      is_mouse_moved()
-//          Check if the mouse was moved (over the grid).
-//
-//      get_mouse_button()
-//          Get the clicked mouse button (SDL_BUTTON_LEFT, SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT).
 //
 //      draw_key(key, at_x, at_y, color)
 //          Write a key at position (at_x, at_y) with a specific color
