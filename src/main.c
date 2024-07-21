@@ -649,12 +649,6 @@ Grid g_grid = {0};
 const SDL_Color g_background_color = COLOR_BLACK;
 SDL_Event g_event = {0};
 
-void flagsetbg(SDL_Renderer* renderer)
-{
-    set_background_color(renderer, g_background_color);
-    SDL_RenderClear(renderer);
-}
-
 static void draw();
 
 bool start(SDL_Renderer* renderer, int width, int height)
