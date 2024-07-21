@@ -276,7 +276,7 @@ int char_to_digit(char c)
     return c - '0';
 }
 
-struct Cell
+typedef struct
 {
     // Rect dimensions and color
     SDL_Rect rect;
@@ -285,11 +285,10 @@ struct Cell
     // Border dimensions and color
     SDL_Rect border;
     SDL_Color border_color;
-};
-typedef struct Cell Cell;
+} Cell;
 
 
-struct Grid
+typedef struct
 {
     // x, y, width, height
     SDL_Rect rect;
@@ -312,8 +311,7 @@ struct Grid
 
     // Matrix of Cells
     Cell cells[GRID_MAX_X_CELLS][GRID_MAX_Y_CELLS];
-};
-typedef struct Grid Grid;
+} Grid;
 
 static void set_color(SDL_Renderer* renderer, SDL_Color color)
 {
