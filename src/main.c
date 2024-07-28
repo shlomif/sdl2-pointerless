@@ -2,38 +2,41 @@
 /*
  * I use:
  *
- * gcc -DSDLVER=2 -O3 -march=native -Wall -Wextra `pkg-config --cflags --libs sdl2` src/main.c -lm
+ * gcc -DSDLVER=2 -O3 -march=native -Wall -Wextra `pkg-config --cflags --libs
+ * sdl2` src/main.c -lm
  *
  *
  * to build
  * */
 // Define screen dimensions
-#define SCREEN_WIDTH        (800)
-#define SCREEN_HEIGHT       (600)
+#define SCREEN_WIDTH (800)
+#define SCREEN_HEIGHT (600)
 
 // Max grid dimension
-#define GRID_MAX_X_CELLS    (10)
-#define GRID_MAX_Y_CELLS    (10)
+#define GRID_MAX_X_CELLS (10)
+#define GRID_MAX_Y_CELLS (10)
 
-#define GRID_DEFAULT_COLOR          COLOR_WHITE
-#define GRID_DEFAULT_BORDER_SIZE    (2)
-#define GRID_DEFAULT_BORDER_COLOR   COLOR_WHITE
+#define GRID_DEFAULT_COLOR COLOR_WHITE
+#define GRID_DEFAULT_BORDER_SIZE (2)
+#define GRID_DEFAULT_BORDER_COLOR COLOR_WHITE
 
-#define USE_AZERTY_KEYBOARD         0
+#define USE_AZERTY_KEYBOARD 0
 
 //***************************************************************************************
 // IMPORTANT NOTE:
 //
 //      To start coding, go down in this file to the 'FREE CODING' section.
 //      All your code should be written inside the 'draw' function (line 1725).
-//      There is also a 'DOCUMENTATION' section just above the 'FREE CODING' section.
+//      There is also a 'DOCUMENTATION' section just above the 'FREE CODING'
+//      section.
 //
 //      Read the README.md file for more details.
 //
 //***************************************************************************************
 
 /*
- * Copyright (c) 2018, 2019, 2021 Amine Ben Hassouna <amine.benhassouna@gmail.com>
+ * Copyright (c) 2018, 2019, 2021 Amine Ben Hassouna
+ <amine.benhassouna@gmail.com>
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any
@@ -79,8 +82,8 @@
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions are met:
 
-    * Redistributions of source code must retain the above copyright notice, this
-      list of conditions and the following disclaimer.
+    * Redistributions of source code must retain the above copyright notice,
+ this list of conditions and the following disclaimer.
 
     * Redistributions in binary form must reproduce the above copyright notice,
       this list of conditions and the following disclaimer in the documentation
@@ -92,19 +95,21 @@
 
     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
     AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-    DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-    FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-    DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-    SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-    CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-    OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+ GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * ---------------------------------------------------------------------------------
  *
  * The 4x6 font modification/extension:
- * Some lower case letters have been modifed and the remaining font characters are made
- * by "Amine Ben Hassouna" and are distributed under the same license as this file.
+ * Some lower case letters have been modifed and the remaining font characters
+ are made
+ * by "Amine Ben Hassouna" and are distributed under the same license as this
+ file.
  *
  */
 
@@ -121,12 +126,12 @@
 #define max(X, Y) (((X) > (Y)) ? (X) : (Y))
 #define min(X, Y) (((X) < (Y)) ? (X) : (Y))
 
-#define _COLOR(RED, GREEN, BLUE)    { RED, GREEN, BLUE, 0xFF }
-#define COLOR(RED, GREEN, BLUE)     ((SDL_Color) { RED, GREEN, BLUE, 0xFF })
+#define _COLOR(RED, GREEN, BLUE) {RED, GREEN, BLUE, 0xFF}
+#define COLOR(RED, GREEN, BLUE) ((SDL_Color){RED, GREEN, BLUE, 0xFF})
 
-const SDL_Color COLOR_BLACK         = _COLOR(0, 0, 0);
-const SDL_Color COLOR_WHITE         = _COLOR(0xFF, 0xFF, 0xFF);
-const SDL_Color NO_COLOR            = COLOR_WHITE;
+const SDL_Color COLOR_BLACK = _COLOR(0, 0, 0);
+const SDL_Color COLOR_WHITE = _COLOR(0xFF, 0xFF, 0xFF);
+const SDL_Color NO_COLOR = COLOR_WHITE;
 
 enum
 {
@@ -189,23 +194,14 @@ SDL_Keycode normalize_key(SDL_Keycode key)
     return key;
 }
 
-bool is_key_letter(SDL_Keycode key)
-{
-    return key >= SDLK_a && key <= SDLK_z;
-}
+bool is_key_letter(SDL_Keycode key) { return key >= SDLK_a && key <= SDLK_z; }
 
-bool is_key_digit(SDL_Keycode key)
-{
-    return key >= SDLK_0 && key <= SDLK_9;
-}
+bool is_key_digit(SDL_Keycode key) { return key >= SDLK_0 && key <= SDLK_9; }
 
 bool is_key_arithmetic_op(SDL_Keycode key)
 {
-    return key == SDLK_PLUS
-           || key == SDLK_MINUS
-           || key == SDLK_DIVIDE
-           || key == SDLK_MULTIPLY
-           || key == SDLK_PERCENT;
+    return key == SDLK_PLUS || key == SDLK_MINUS || key == SDLK_DIVIDE ||
+           key == SDLK_MULTIPLY || key == SDLK_PERCENT;
 }
 
 char key_to_char(SDL_Keycode key)
@@ -214,11 +210,11 @@ char key_to_char(SDL_Keycode key)
 
     if (is_key_letter(key))
     {
-        return (char) (key - SDLK_a + 'A');
+        return (char)(key - SDLK_a + 'A');
     }
     else if (key >= SDLK_SPACE && key <= SDLK_BACKQUOTE)
     {
-        return (char) key;
+        return (char)key;
     }
 
     return 0;
@@ -228,7 +224,7 @@ char key_to_char_lowercase(SDL_Keycode key)
 {
     if (is_key_letter(key))
     {
-        return (char) key;
+        return (char)key;
     }
     else
     {
@@ -236,14 +232,13 @@ char key_to_char_lowercase(SDL_Keycode key)
     }
 }
 
-
 int key_to_int(SDL_Keycode key)
 {
     key = normalize_key(key);
 
     if (is_key_digit(key))
     {
-        return (int) (key - SDLK_0);
+        return (int)(key - SDLK_0);
     }
     else
     {
@@ -251,20 +246,11 @@ int key_to_int(SDL_Keycode key)
     }
 }
 
-SDL_Keycode digit_to_key(int digit)
-{
-    return (abs(digit) % 10) + SDLK_0;
-}
+SDL_Keycode digit_to_key(int digit) { return (abs(digit) % 10) + SDLK_0; }
 
-char digit_to_char(int digit)
-{
-    return (abs(digit) % 10) + '0';
-}
+char digit_to_char(int digit) { return (abs(digit) % 10) + '0'; }
 
-int char_to_digit(char c)
-{
-    return c - '0';
-}
+int char_to_digit(char c) { return c - '0'; }
 
 typedef struct
 {
@@ -276,7 +262,6 @@ typedef struct
     SDL_Rect border;
     SDL_Color border_color;
 } Cell;
-
 
 typedef struct
 {
@@ -303,13 +288,13 @@ typedef struct
     Cell cells[GRID_MAX_X_CELLS][GRID_MAX_Y_CELLS];
 } Grid;
 
-static void set_color(SDL_Renderer* renderer, SDL_Color color)
+static void set_color(SDL_Renderer *renderer, SDL_Color color)
 {
     // Initialize renderer color
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 }
 
-void set_background_color(SDL_Renderer* renderer, SDL_Color color)
+void set_background_color(SDL_Renderer *renderer, SDL_Color color)
 {
     // Initialize renderer color
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
@@ -318,29 +303,29 @@ void set_background_color(SDL_Renderer* renderer, SDL_Color color)
     // SDL_RenderClear(renderer);
 }
 
-int random_int(int min, int max)
-{
-    return ( rand() % (max + 1) ) + min;
-}
+int random_int(int min, int max) { return (rand() % (max + 1)) + min; }
 
 bool is_color_equal(SDL_Color color1, SDL_Color color2)
 {
-    return *((Sint32*) &color1) == *((Sint32*) &color2);
+    return *((Sint32 *)&color1) == *((Sint32 *)&color2);
 }
 
-void init_cell(Grid* grid, Cell* cell, int i, int j, SDL_Color color, SDL_Color border_color)
+void init_cell(Grid *grid, Cell *cell, int i, int j, SDL_Color color,
+    SDL_Color border_color)
 {
     // Init rect
     int interspace_width = grid->x_cells * grid->cells_border * 2;
-    cell->rect.w = (grid->rect.w - (grid->border * 2) - interspace_width) / grid->x_cells;
+    cell->rect.w =
+        (grid->rect.w - (grid->border * 2) - interspace_width) / grid->x_cells;
 
     int interspace_heigth = grid->y_cells * grid->cells_border * 2;
-    cell->rect.h = (grid->rect.h - (grid->border * 2) - interspace_heigth) / grid->y_cells;
+    cell->rect.h =
+        (grid->rect.h - (grid->border * 2) - interspace_heigth) / grid->y_cells;
 
-    cell->rect.x = grid->rect.x + grid->border + grid->cells_border
-                   + (grid->cells_border * 2 + cell->rect.w) * i;
-    cell->rect.y = grid->rect.y + grid->border + grid->cells_border
-                   + (grid->cells_border * 2 + cell->rect.h) * j;
+    cell->rect.x = grid->rect.x + grid->border + grid->cells_border +
+                   (grid->cells_border * 2 + cell->rect.w) * i;
+    cell->rect.y = grid->rect.y + grid->border + grid->cells_border +
+                   (grid->cells_border * 2 + cell->rect.h) * j;
 
     // Init rectColor
     cell->rect_color = color;
@@ -355,57 +340,46 @@ void init_cell(Grid* grid, Cell* cell, int i, int j, SDL_Color color, SDL_Color 
     cell->border_color = border_color;
 }
 
-bool init_grid(Grid* grid)
+bool init_grid(Grid *grid)
 {
-    if(!grid->rect.w || !grid->rect.h || !grid->x_cells || !grid->y_cells)
+    if (!grid->rect.w || !grid->rect.h || !grid->x_cells || !grid->y_cells)
     {
-        fprintf(stderr, "Grid dimensions or number of cells not initialised !\n");
+        fprintf(
+            stderr, "Grid dimensions or number of cells not initialised !\n");
         return false;
     }
 
-    if(grid->x_cells > GRID_MAX_X_CELLS || grid->y_cells > GRID_MAX_Y_CELLS)
+    if (grid->x_cells > GRID_MAX_X_CELLS || grid->y_cells > GRID_MAX_Y_CELLS)
     {
-        fprintf(stderr, "Grid number of cells (%d,%d) is greater than (%d,%d) !\n",
-                grid->x_cells, grid->y_cells,
-                GRID_MAX_X_CELLS, GRID_MAX_Y_CELLS);
+        fprintf(stderr,
+            "Grid number of cells (%d,%d) is greater than (%d,%d) !\n",
+            grid->x_cells, grid->y_cells, GRID_MAX_X_CELLS, GRID_MAX_Y_CELLS);
         return false;
     }
 
     // Init all cells
-    for(int i = 0; i < grid->x_cells; ++i)
+    for (int i = 0; i < grid->x_cells; ++i)
     {
-        for(int j = 0; j < grid->y_cells; ++j)
+        for (int j = 0; j < grid->y_cells; ++j)
         {
-            init_cell(grid,
-                      &(grid->cells[i][j]),
-                      i, j,
-                      grid->background_color,
-                      grid->cells_border_color);
+            init_cell(grid, &(grid->cells[i][j]), i, j, grid->background_color,
+                grid->cells_border_color);
         }
     }
 
     return true;
 }
 
-static void putpixel(
-    SDL_Renderer* renderer,
-    int x,
-    int y,
-    SDL_Color color
-)
+static void putpixel(SDL_Renderer *renderer, int x, int y, SDL_Color color)
 {
     // Set renderer color to cell color
-    SDL_SetRenderDrawColor(renderer,
-        color.r,
-        color.g,
-        color.b,
-        color.a);
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 
     SDL_Rect rect;
-    rect.x=x;
-    rect.y=y;
-    rect.w=1;
-    rect.h=1;
+    rect.x = x;
+    rect.y = y;
+    rect.w = 1;
+    rect.h = 1;
 // #define DEBUG
 #ifdef DEBUG
     fprintf(stdout, "putpixel[x=%d , y=%d]\n", x, y);
@@ -415,42 +389,34 @@ static void putpixel(
     SDL_RenderFillRect(renderer, &(rect));
 }
 
-void render_cell(Cell* cell, SDL_Renderer* renderer)
+void render_cell(Cell *cell, SDL_Renderer *renderer)
 {
-    if(cell->border.x != cell->rect.x) // Cells border thickness different from 0
+    if (cell->border.x !=
+        cell->rect.x) // Cells border thickness different from 0
     {
         // Set renderer color to cell color
-        SDL_SetRenderDrawColor(renderer,
-                               cell->border_color.r,
-                               cell->border_color.g,
-                               cell->border_color.b,
-                               cell->border_color.a);
+        SDL_SetRenderDrawColor(renderer, cell->border_color.r,
+            cell->border_color.g, cell->border_color.b, cell->border_color.a);
 
         // Render filled cell
         SDL_RenderFillRect(renderer, &(cell->border));
     }
 
     // Set renderer color to cell color
-    SDL_SetRenderDrawColor(renderer,
-                           cell->rect_color.r,
-                           cell->rect_color.g,
-                           cell->rect_color.b,
-                           cell->rect_color.a);
+    SDL_SetRenderDrawColor(renderer, cell->rect_color.r, cell->rect_color.g,
+        cell->rect_color.b, cell->rect_color.a);
 
     // Render filled cell
     SDL_RenderFillRect(renderer, &(cell->rect));
 }
 
-void render_grid(Grid* grid, SDL_Renderer* renderer)
+void render_grid(Grid *grid, SDL_Renderer *renderer)
 {
-//    if(grid->border != 0) // Grid border thickness different from 0
+    //    if(grid->border != 0) // Grid border thickness different from 0
     {
         // Set renderer color to draw the grid border
-        SDL_SetRenderDrawColor(renderer,
-                               grid->border_color.r,
-                               grid->border_color.g,
-                               grid->border_color.b,
-                               grid->border_color.a);
+        SDL_SetRenderDrawColor(renderer, grid->border_color.r,
+            grid->border_color.g, grid->border_color.b, grid->border_color.a);
 
         // Render grid border
         SDL_RenderFillRect(renderer, &(grid->rect));
@@ -458,45 +424,45 @@ void render_grid(Grid* grid, SDL_Renderer* renderer)
 
     return;
     // Render all cells
-    for(int i = 0; i < grid->x_cells; ++i)
+    for (int i = 0; i < grid->x_cells; ++i)
     {
-        for(int j = 0; j < grid->y_cells; ++j)
+        for (int j = 0; j < grid->y_cells; ++j)
         {
             render_cell(&(grid->cells[i][j]), renderer);
         }
     }
 }
 
-int ajust_grid_size(Grid* grid)
+int ajust_grid_size(Grid *grid)
 {
-    if(!grid->rect.w || !grid->rect.h || !grid->x_cells || !grid->y_cells)
+    if (!grid->rect.w || !grid->rect.h || !grid->x_cells || !grid->y_cells)
     {
-        fprintf(stderr, "Grid dimensions or number of cells not initialised !\n");
+        fprintf(
+            stderr, "Grid dimensions or number of cells not initialised !\n");
         return false;
     }
 
     // Init rect
     int interspace_width = grid->x_cells * grid->cells_border * 2;
-    grid->rect.w -= (grid->rect.w - (grid->border * 2) - interspace_width) % grid->x_cells;
+    grid->rect.w -=
+        (grid->rect.w - (grid->border * 2) - interspace_width) % grid->x_cells;
 
     int interspace_heigth = grid->y_cells * grid->cells_border * 2;
-    grid->rect.h -= (grid->rect.h - (grid->border * 2) - interspace_heigth) % grid->y_cells;
+    grid->rect.h -=
+        (grid->rect.h - (grid->border * 2) - interspace_heigth) % grid->y_cells;
 
     return true;
 }
 
-void center_grid(Grid* grid, int screen_width, int screen_height)
+void center_grid(Grid *grid, int screen_width, int screen_height)
 {
     grid->rect.x = (screen_width - grid->rect.w) / 2;
     grid->rect.y = (screen_height - grid->rect.h) / 2;
 }
 
-SDL_Color get_grid_border_color(Grid* grid)
-{
-    return grid->border_color;
-}
+SDL_Color get_grid_border_color(Grid *grid) { return grid->border_color; }
 
-SDL_Keycode get_key(SDL_Event* event)
+SDL_Keycode get_key(SDL_Event *event)
 {
     if (event->type == SDL_KEYDOWN)
     {
@@ -506,28 +472,30 @@ SDL_Keycode get_key(SDL_Event* event)
     return SDLK_UNKNOWN;
 }
 
-bool start(SDL_Renderer* renderer, int width, int height);
+bool start(SDL_Renderer *renderer, int width, int height);
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     // Unused argc, argv
-    (void) argc;
-    (void) argv;
+    (void)argc;
+    (void)argv;
 
     // Initialize the pseudo-random number generator
     srand(time(NULL));
 
     // Initialize SDL
-    if(SDL_Init(SDL_INIT_VIDEO) < 0)
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
-        fprintf(stderr, "SDL could not be initialized!\n"
-                "SDL_Error: %s\n", SDL_GetError());
+        fprintf(stderr,
+            "SDL could not be initialized!\n"
+            "SDL_Error: %s\n",
+            SDL_GetError());
         return 0;
     }
 
 #if defined linux && SDL_VERSION_ATLEAST(2, 0, 8)
     // Disable compositor bypass
-    if(!SDL_SetHint(SDL_HINT_VIDEO_X11_NET_WM_BYPASS_COMPOSITOR, "0"))
+    if (!SDL_SetHint(SDL_HINT_VIDEO_X11_NET_WM_BYPASS_COMPOSITOR, "0"))
     {
         fprintf(stderr, "SDL can not disable compositor bypass!\n");
         return 0;
@@ -535,24 +503,27 @@ int main(int argc, char* argv[])
 #endif
 
     // Create window
-    SDL_Window* window = SDL_CreateWindow("Simple grid with C and SDL2",
-                                          SDL_WINDOWPOS_UNDEFINED,
-                                          SDL_WINDOWPOS_UNDEFINED,
-                                          SCREEN_WIDTH, SCREEN_HEIGHT,
-                                          SDL_WINDOW_SHOWN);
-    if(!window)
+    SDL_Window *window = SDL_CreateWindow("Simple grid with C and SDL2",
+        SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
+        SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    if (!window)
     {
-        fprintf(stderr, "Window could not be created!\n"
-                "SDL_Error: %s\n", SDL_GetError());
+        fprintf(stderr,
+            "Window could not be created!\n"
+            "SDL_Error: %s\n",
+            SDL_GetError());
     }
     else
     {
         // Create renderer
-        SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-        if(!renderer)
+        SDL_Renderer *renderer =
+            SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+        if (!renderer)
         {
-            fprintf(stderr, "Renderer could not be created!\n"
-                    "SDL_Error: %s\n", SDL_GetError());
+            fprintf(stderr,
+                "Renderer could not be created!\n"
+                "SDL_Error: %s\n",
+                SDL_GetError());
         }
         else
         {
@@ -573,7 +544,7 @@ int main(int argc, char* argv[])
     return 0;
 }
 
-void delay(SDL_Renderer* renderer, Uint32 ms, SDL_Event* event)
+void delay(SDL_Renderer *renderer, Uint32 ms, SDL_Event *event)
 {
     event->type = 0;
 
@@ -585,24 +556,24 @@ void delay(SDL_Renderer* renderer, Uint32 ms, SDL_Event* event)
         SDL_RenderPresent(renderer);
 
         SDL_Event e;
-        while(SDL_WaitEventTimeout(&e, step))
+        while (SDL_WaitEventTimeout(&e, step))
         {
             // User requests quit
-            if(e.type == SDL_QUIT)
+            if (e.type == SDL_QUIT)
             {
                 exit(0);
                 break;
             }
-            else if(e.type == SDL_KEYDOWN)
+            else if (e.type == SDL_KEYDOWN)
             {
                 *event = e;
                 event->key.keysym.sym = normalize_key(event->key.keysym.sym);
             }
-            else if(e.type == SDL_MOUSEBUTTONDOWN)
+            else if (e.type == SDL_MOUSEBUTTONDOWN)
             {
                 *event = e;
             }
-            else if(e.type == SDL_MOUSEMOTION)
+            else if (e.type == SDL_MOUSEMOTION)
             {
                 *event = e;
             }
@@ -611,10 +582,11 @@ void delay(SDL_Renderer* renderer, Uint32 ms, SDL_Event* event)
 }
 
 static int counter = 0;
-bool render_and_delay(SDL_Renderer* renderer, SDL_Color background_color, Uint32 ms, SDL_Event* event)
+bool render_and_delay(SDL_Renderer *renderer, SDL_Color background_color,
+    Uint32 ms, SDL_Event *event)
 {
 #if 1
-    if (! counter)
+    if (!counter)
     {
         ++counter;
         // Set white background
@@ -634,14 +606,14 @@ bool render_and_delay(SDL_Renderer* renderer, SDL_Color background_color, Uint32
 }
 
 // Global variables
-SDL_Renderer* g_renderer = NULL;
+SDL_Renderer *g_renderer = NULL;
 Grid g_grid = {0};
 const SDL_Color g_background_color = COLOR_BLACK;
 SDL_Event g_event = {0};
 
 static void draw();
 
-bool start(SDL_Renderer* renderer, int width, int height)
+bool start(SDL_Renderer *renderer, int width, int height)
 {
     g_grid.background_color = g_background_color;
     g_grid.border_color = g_background_color;
@@ -663,7 +635,7 @@ bool start(SDL_Renderer* renderer, int width, int height)
 
     // Set grid border thickness and color
     g_grid.border = GRID_DEFAULT_BORDER_SIZE;
-   // g_grid.border_color = GRID_DEFAULT_BORDER_COLOR;
+    // g_grid.border_color = GRID_DEFAULT_BORDER_COLOR;
 
     // Set cells border thickness and color
     g_grid.cells_border = g_grid.border;
@@ -673,7 +645,7 @@ bool start(SDL_Renderer* renderer, int width, int height)
     ajust_grid_size(&g_grid);
     center_grid(&g_grid, width, height);
 
-    if(!init_grid(&g_grid))
+    if (!init_grid(&g_grid))
     {
         fprintf(stderr, "Grid fail to initialize !\n");
         return false;
@@ -712,7 +684,7 @@ bool start(SDL_Renderer* renderer, int width, int height)
     bool quit = false;
 
     // Event loop
-    while(!quit)
+    while (!quit)
     {
         SDL_Event e;
 
@@ -720,11 +692,11 @@ bool start(SDL_Renderer* renderer, int width, int height)
         SDL_WaitEvent(&e);
 
         // User requests quit
-        if(e.type == SDL_QUIT)
+        if (e.type == SDL_QUIT)
         {
             quit = true;
         }
-        else if(e.type == SDL_KEYDOWN)
+        else if (e.type == SDL_KEYDOWN)
         {
             if (e.key.keysym.sym == SDLK_ESCAPE)
             {
@@ -739,13 +711,13 @@ bool start(SDL_Renderer* renderer, int width, int height)
 }
 
 #if 0
-#define set_background_color(color)                 (g_background_color = color)
-#define get_background_color()                      (g_background_color)
+#define set_background_color(color) (g_background_color = color)
+#define get_background_color() (g_background_color)
 #endif
-#define get_grid_border_color()                     get_grid_border_color(&g_grid)
-#define delay(ms)                                   render_and_delay(g_renderer, g_background_color, ms, &g_event)
-#define get_key()                                   get_key(&g_event)
-#define exit()                                      exit(0)
+#define get_grid_border_color() get_grid_border_color(&g_grid)
+#define delay(ms) render_and_delay(g_renderer, g_background_color, ms, &g_event)
+#define get_key() get_key(&g_event)
+#define exit() exit(0)
 
 //***************************************************************************************
 // DOCUMENTATION
@@ -850,7 +822,7 @@ bool start(SDL_Renderer* renderer, int width, int height)
 
 #define LOG2_DEGREES_RANGE 9
 #define DEGREES_RANGE (1 << (LOG2_DEGREES_RANGE))
-#define DEG_MOD(x) ((x)&(DEGREES_RANGE-1))
+#define DEG_MOD(x) ((x) & (DEGREES_RANGE - 1))
 
 static bool mycont = true;
 static void draw()
@@ -869,7 +841,7 @@ static void draw()
     int x_abs_offset = 10;
     int sin_lookup[DEGREES_RANGE];
 
-    int x,y,t, prev_t;
+    int x, y, t, prev_t;
     int prev_y_height;
     int this_y_height;
     int x_pos, y_pos;
@@ -878,20 +850,20 @@ static void draw()
     int prev_y_acc_degree, prev_y_x_acc_degree;
     int y_acc_y_pos, y_acc_x_pos;
 #ifdef WITH_RECTS
-    SDL_Rect * rects;
-    SDL_Rect * the_rect;
+    SDL_Rect *rects;
+    SDL_Rect *the_rect;
 #endif
 #define PI 3.14159265358
     int a;
 
-    for(a=0 ; a < DEGREES_RANGE  ;a++)
+    for (a = 0; a < DEGREES_RANGE; a++)
     {
-        sin_lookup[a] = (int)(sin((2*PI/DEGREES_RANGE)*a)*y_amplitude);
+        sin_lookup[a] = (int)(sin((2 * PI / DEGREES_RANGE) * a) * y_amplitude);
     }
 
 #ifdef WITH_RECTS
-    rects = (SDL_Rect *)malloc(sizeof(rects[0]) * x_num_points*y_num_points);
-    for(a=0;a<x_num_points*y_num_points;a++)
+    rects = (SDL_Rect *)malloc(sizeof(rects[0]) * x_num_points * y_num_points);
+    for (a = 0; a < x_num_points * y_num_points; a++)
     {
         rects[a].w = 1;
         rects[a].h = 2;
@@ -907,10 +879,10 @@ static void draw()
      * */
     the_rect = rects;
     y_acc_x_pos = x_abs_offset;
-    for(y=0;y<y_num_points;y++)
+    for (y = 0; y < y_num_points; y++)
     {
         x_pos = y_acc_x_pos;
-        for(x=0;x<x_num_points;x++)
+        for (x = 0; x < x_num_points; x++)
         {
             the_rect->x = x_pos;
             the_rect++;
@@ -932,7 +904,7 @@ static void draw()
     }
 #endif
     prev_t = 0;
-    for(t=1 ; mycont ; t = ((t+1)&(DEGREES_RANGE-1)))
+    for (t = 1; mycont; t = ((t + 1) & (DEGREES_RANGE - 1)))
     {
 #ifdef WITH_RECTS
         the_rect = rects;
@@ -942,26 +914,20 @@ static void draw()
         prev_y_acc_degree = prev_t;
         y_acc_y_pos = y_abs_offset;
         y_acc_x_pos = x_abs_offset;
-        for(y=0;y<y_num_points;y++)
+        for (y = 0; y < y_num_points; y++)
         {
             y_x_acc_degree = y_acc_degree;
             prev_y_x_acc_degree = prev_y_acc_degree;
 
             x_pos = y_acc_x_pos;
             y_pos = y_acc_y_pos;
-            for(x=0;x<x_num_points;x++)
+            for (x = 0; x < x_num_points; x++)
             {
-                prev_y_height =
-                    y_pos +
-                    sin_lookup[prev_y_x_acc_degree]
-                    ;
-                this_y_height =
-                    y_pos +
-                    sin_lookup[y_x_acc_degree]
-                    ;
+                prev_y_height = y_pos + sin_lookup[prev_y_x_acc_degree];
+                this_y_height = y_pos + sin_lookup[y_x_acc_degree];
 
 #ifdef WITH_RECTS
-                the_rect->y = min(prev_y_height,this_y_height);
+                the_rect->y = min(prev_y_height, this_y_height);
                 the_rect++;
 #endif
 
@@ -970,34 +936,22 @@ static void draw()
 #define screen g_renderer
 // #error right
 #define fill_color COLOR_BLACK
-#define pen_color  COLOR_WHITE
-                putpixel(
-                    screen,
-                    x_pos,
-                    prev_y_height,
-                    fill_color
-                );
+#define pen_color COLOR_WHITE
+                putpixel(screen, x_pos, prev_y_height, fill_color);
 
-                putpixel(
-                    screen,
-                    x_pos,
-                    this_y_height,
-                    pen_color
-                );
+                putpixel(screen, x_pos, this_y_height, pen_color);
 
-                set_color(
-                    screen,
-                    fill_color
-                );
+                set_color(screen, fill_color);
                 set_background_color(g_renderer, g_grid.background_color);
 
-                y_x_acc_degree = DEG_MOD(y_x_acc_degree+x_amp_delta);
-                prev_y_x_acc_degree = DEG_MOD(prev_y_x_acc_degree+x_amp_delta);
+                y_x_acc_degree = DEG_MOD(y_x_acc_degree + x_amp_delta);
+                prev_y_x_acc_degree =
+                    DEG_MOD(prev_y_x_acc_degree + x_amp_delta);
                 x_pos += x_x_offset;
                 y_pos += x_y_offset;
             }
-            y_acc_degree = DEG_MOD(y_acc_degree+y_amp_delta);
-            prev_y_acc_degree = DEG_MOD(prev_y_acc_degree+y_amp_delta);
+            y_acc_degree = DEG_MOD(y_acc_degree + y_amp_delta);
+            prev_y_acc_degree = DEG_MOD(prev_y_acc_degree + y_amp_delta);
             y_acc_y_pos += y_y_offset;
             y_acc_x_pos += y_x_offset;
         }
