@@ -310,37 +310,7 @@ bool is_color_equal(SDL_Color color1, SDL_Color color2)
     return *((Sint32 *)&color1) == *((Sint32 *)&color2);
 }
 
-void init_cell(Grid *grid, Cell *cell, int i, int j, SDL_Color color,
-    SDL_Color border_color)
-{
-    // Init rect
-    int interspace_width = grid->x_cells * grid->cells_border * 2;
-    cell->rect.w =
-        (grid->rect.w - (grid->border * 2) - interspace_width) / grid->x_cells;
-
-    int interspace_heigth = grid->y_cells * grid->cells_border * 2;
-    cell->rect.h =
-        (grid->rect.h - (grid->border * 2) - interspace_heigth) / grid->y_cells;
-
-    cell->rect.x = grid->rect.x + grid->border + grid->cells_border +
-                   (grid->cells_border * 2 + cell->rect.w) * i;
-    cell->rect.y = grid->rect.y + grid->border + grid->cells_border +
-                   (grid->cells_border * 2 + cell->rect.h) * j;
-
-    // Init rectColor
-    cell->rect_color = color;
-
-    // Init border
-    cell->border.w = cell->rect.w + grid->cells_border * 2;
-    cell->border.h = cell->rect.h + grid->cells_border * 2;
-    cell->border.x = cell->rect.x - grid->cells_border;
-    cell->border.y = cell->rect.y - grid->cells_border;
-
-    // Init borderColor
-    cell->border_color = border_color;
-}
-
-bool init_grid(Grid *grid)
+bool init_grid(Grid* grid)
 {
     if (!grid->rect.w || !grid->rect.h || !grid->x_cells || !grid->y_cells)
     {
@@ -356,17 +326,6 @@ bool init_grid(Grid *grid)
             grid->x_cells, grid->y_cells, GRID_MAX_X_CELLS, GRID_MAX_Y_CELLS);
         return false;
     }
-
-    // Init all cells
-    for (int i = 0; i < grid->x_cells; ++i)
-    {
-        for (int j = 0; j < grid->y_cells; ++j)
-        {
-            init_cell(grid, &(grid->cells[i][j]), i, j, grid->background_color,
-                grid->cells_border_color);
-        }
-    }
-
     return true;
 }
 
@@ -389,27 +348,6 @@ static void putpixel(SDL_Renderer *renderer, int x, int y, SDL_Color color)
     SDL_RenderFillRect(renderer, &(rect));
 }
 
-void render_cell(Cell *cell, SDL_Renderer *renderer)
-{
-    if (cell->border.x !=
-        cell->rect.x) // Cells border thickness different from 0
-    {
-        // Set renderer color to cell color
-        SDL_SetRenderDrawColor(renderer, cell->border_color.r,
-            cell->border_color.g, cell->border_color.b, cell->border_color.a);
-
-        // Render filled cell
-        SDL_RenderFillRect(renderer, &(cell->border));
-    }
-
-    // Set renderer color to cell color
-    SDL_SetRenderDrawColor(renderer, cell->rect_color.r, cell->rect_color.g,
-        cell->rect_color.b, cell->rect_color.a);
-
-    // Render filled cell
-    SDL_RenderFillRect(renderer, &(cell->rect));
-}
-
 void render_grid(Grid *grid, SDL_Renderer *renderer)
 {
     //    if(grid->border != 0) // Grid border thickness different from 0
@@ -423,14 +361,6 @@ void render_grid(Grid *grid, SDL_Renderer *renderer)
     }
 
     return;
-    // Render all cells
-    for (int i = 0; i < grid->x_cells; ++i)
-    {
-        for (int j = 0; j < grid->y_cells; ++j)
-        {
-            render_cell(&(grid->cells[i][j]), renderer);
-        }
-    }
 }
 
 int ajust_grid_size(Grid *grid)
