@@ -348,9 +348,9 @@ static void putpixel(SDL_Renderer *renderer, int x, int y, SDL_Color color)
     SDL_RenderFillRect(renderer, &(rect));
 }
 
-void render_grid(Grid *grid, SDL_Renderer *renderer)
+static void render_grid(Grid* grid, SDL_Renderer* renderer)
 {
-    //    if(grid->border != 0) // Grid border thickness different from 0
+//    if(grid->border != 0) // Grid border thickness different from 0
     {
         // Set renderer color to draw the grid border
         SDL_SetRenderDrawColor(renderer, grid->border_color.r,
