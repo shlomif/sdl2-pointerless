@@ -303,13 +303,6 @@ void set_background_color(SDL_Renderer *renderer, SDL_Color color)
     // SDL_RenderClear(renderer);
 }
 
-int random_int(int min, int max) { return (rand() % (max + 1)) + min; }
-
-bool is_color_equal(SDL_Color color1, SDL_Color color2)
-{
-    return *((Sint32 *)&color1) == *((Sint32 *)&color2);
-}
-
 bool init_grid(Grid* grid)
 {
     if (!grid->rect.w || !grid->rect.h || !grid->x_cells || !grid->y_cells)
@@ -701,12 +694,6 @@ bool start(SDL_Renderer *renderer, int width, int height)
 //
 //      char_to_digit(c)
 //          Convert a character to a digit (integer)
-//
-//      random_int(min, max)
-//          Get a random integer between min and max
-//
-//      is_color_equal(color1, color2)
-//          Check if 'color1' is equal to 'color2' (return a boolean)
 //
 //      exit()
 //          Exit the program
