@@ -437,7 +437,8 @@ int main(int argc, char *argv[])
     // Create window
     SDL_Window *window = SDL_CreateWindow("Simple grid with C and SDL3",
          SCREEN_WIDTH,
-        SCREEN_HEIGHT, SDL_WINDOWPOS_UNDEFINED|SDL_WINDOWPOS_UNDEFINED);
+        SCREEN_HEIGHT, SDL_WINDOW_OPENGL //SDL_WINDOWPOS_UNDEFINED|SDL_WINDOWPOS_UNDEFINED
+                                        );
     if (!window)
     {
         fprintf(stderr,
