@@ -398,7 +398,7 @@ SDL_Keycode get_key(SDL_Event *event)
 {
     if (event->type == SDL_EVENT_KEY_DOWN)
     {
-        return event->key.sym;
+        return event->key.key;
     }
 
     return SDLK_UNKNOWN;
@@ -416,7 +416,7 @@ int main(int argc, char *argv[])
     srand(time(NULL));
 
     // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    if (! SDL_Init(SDL_INIT_VIDEO))
     {
         fprintf(stderr,
             "SDL could not be initialized!\n"
@@ -436,8 +436,8 @@ int main(int argc, char *argv[])
 
     // Create window
     SDL_Window *window = SDL_CreateWindow("Simple grid with C and SDL3",
-        SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
-        SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+         SCREEN_WIDTH,
+        SCREEN_HEIGHT, SDL_WINDOWPOS_UNDEFINED|SDL_WINDOWPOS_UNDEFINED);
     if (!window)
     {
         fprintf(stderr,
@@ -449,7 +449,7 @@ int main(int argc, char *argv[])
     {
         // Create renderer
         SDL_Renderer *renderer =
-            SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+            SDL_CreateRenderer(window, NULL);
         if (!renderer)
         {
             fprintf(stderr,
@@ -491,21 +491,21 @@ void delay(SDL_Renderer *renderer, Uint32 ms, SDL_Event *event)
         while (SDL_WaitEventTimeout(&e, step))
         {
             // User requests quit
-            if (e.type == SDL_QUIT)
+            if (e.type == SDL_EVENT_QUIT)
             {
                 exit(0);
                 break;
             }
-            else if (e.type == SDL_KEYDOWN)
+            else if (e.type == SDL_EVENT_KEY_DOWN)
             {
                 *event = e;
-                event->key.keysym.sym = normalize_key(event->key.keysym.sym);
+                event->key.key = normalize_key(event->key.key);
             }
-            else if (e.type == SDL_MOUSEBUTTONDOWN)
+            else if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
             {
                 *event = e;
             }
-            else if (e.type == SDL_MOUSEMOTION)
+            else if (e.type == SDL_EVENT_MOUSE_MOTION)
             {
                 *event = e;
             }
@@ -624,13 +624,13 @@ bool start(SDL_Renderer *renderer, int width, int height)
         SDL_WaitEvent(&e);
 
         // User requests quit
-        if (e.type == SDL_QUIT)
+        if (e.type == SDL_EVENT_QUIT)
         {
             quit = true;
         }
-        else if (e.type == SDL_KEYDOWN)
+        else if (e.type == SDL_EVENT_KEY_DOWN)
         {
-            if (e.key.keysym.sym == SDLK_ESCAPE)
+            if (e.key.key == SDLK_ESCAPE)
             {
                 quit = true;
             }
