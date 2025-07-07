@@ -117,10 +117,12 @@
 // LIBRARY SECTION
 //****************************************************************************************
 
-#include <stdio.h>
+#include <math.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 // Define MAX and MIN macros
 #define max(X, Y) (((X) > (Y)) ? (X) : (Y))
@@ -194,7 +196,7 @@ SDL_Keycode normalize_key(SDL_Keycode key)
     return key;
 }
 
-bool is_key_letter(SDL_Keycode key) { return key >= SDLK_a && key <= SDLK_z; }
+bool is_key_letter(SDL_Keycode key) { return key >= SDLK_A && key <= SDLK_Z; }
 
 bool is_key_digit(SDL_Keycode key) { return key >= SDLK_0 && key <= SDLK_9; }
 
@@ -210,9 +212,9 @@ char key_to_char(SDL_Keycode key)
 
     if (is_key_letter(key))
     {
-        return (char)(key - SDLK_a + 'A');
+        return (char)(key - SDLK_A + 'A');
     }
-    else if (key >= SDLK_SPACE && key <= SDLK_BACKQUOTE)
+    else if (key >= SDLK_SPACE && key <= SDLK_GRAVE)
     {
         return (char)key;
     }
@@ -266,7 +268,7 @@ typedef struct
 typedef struct
 {
     // x, y, width, height
-    SDL_Rect rect;
+    SDL_FRect rect;
 
     // Grid background color
     SDL_Color background_color;
@@ -334,7 +336,7 @@ static void putpixel(SDL_Renderer *renderer, int x, int y, SDL_Color color)
     // Set renderer color to cell color
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 
-    SDL_Rect rect;
+    SDL_FRect rect;
     rect.x = x;
     rect.y = y;
     rect.w = 1;
@@ -375,11 +377,11 @@ int ajust_grid_size(Grid *grid)
     // Init rect
     int interspace_width = grid->x_cells * grid->cells_border * 2;
     grid->rect.w -=
-        (grid->rect.w - (grid->border * 2) - interspace_width) % grid->x_cells;
+        ((int)grid->rect.w - (grid->border * 2) - interspace_width) % grid->x_cells;
 
     int interspace_heigth = grid->y_cells * grid->cells_border * 2;
     grid->rect.h -=
-        (grid->rect.h - (grid->border * 2) - interspace_heigth) % grid->y_cells;
+        ((int)grid->rect.h - (grid->border * 2) - interspace_heigth) % grid->y_cells;
 
     return true;
 }
@@ -394,9 +396,9 @@ SDL_Color get_grid_border_color(Grid *grid) { return grid->border_color; }
 
 SDL_Keycode get_key(SDL_Event *event)
 {
-    if (event->type == SDL_KEYDOWN)
+    if (event->type == SDL_EVENT_KEY_DOWN)
     {
-        return event->key.keysym.sym;
+        return event->key.sym;
     }
 
     return SDLK_UNKNOWN;
@@ -423,7 +425,7 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-#if defined linux && SDL_VERSION_ATLEAST(2, 0, 8)
+#if defined linux && SDL_VERSION_ATLEAST(3, 0, 0)
     // Disable compositor bypass
     if (!SDL_SetHint(SDL_HINT_VIDEO_X11_NET_WM_BYPASS_COMPOSITOR, "0"))
     {
@@ -433,7 +435,7 @@ int main(int argc, char *argv[])
 #endif
 
     // Create window
-    SDL_Window *window = SDL_CreateWindow("Simple grid with C and SDL2",
+    SDL_Window *window = SDL_CreateWindow("Simple grid with C and SDL3",
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
         SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     if (!window)

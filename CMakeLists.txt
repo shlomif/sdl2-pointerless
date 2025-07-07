@@ -26,13 +26,13 @@
 # DEALINGS IN THE SOFTWARE.
 #
 
-# Set the cmake minimum version to 3.9
-cmake_minimum_required(VERSION 3.9)
+# Set the cmake minimum version to 3.14
+cmake_minimum_required(VERSION 3.14)
 
 # Define the project name
 project(sdl2-pointerless)
 
-# Add SDL2 CMake modules
+# Add SDL3 CMake modules
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2)
 
 # Add all c source files under the src directory
@@ -47,26 +47,26 @@ target_compile_options(${PROJECT_NAME} PRIVATE $<$<C_COMPILER_ID:MSVC>:/W4 /WX>)
 target_compile_options(${PROJECT_NAME} PRIVATE $<$<NOT:$<C_COMPILER_ID:MSVC>>:-Wall -Wextra -pedantic>)
 
 
-# Add SDL2 library
-find_package(SDL2 REQUIRED)
-target_link_libraries(${PROJECT_NAME} SDL2::Main "m" "pthread")
-# Add SDL2_image library
-#find_package(SDL2_image REQUIRED)
-#target_link_libraries(${PROJECT_NAME} SDL2::Image)
+# Add SDL3 library
+find_package(SDL3 REQUIRED)
+target_link_libraries(${PROJECT_NAME} SDL3 "m" "pthread")
+# Add SDL3_image library
+#find_package(SDL3_image REQUIRED)
+#target_link_libraries(${PROJECT_NAME} SDL3::Image)
 
-# Add SDL2_ttf library
-#find_package(SDL2_ttf REQUIRED)
-#target_link_libraries(${PROJECT_NAME} SDL2::TTF)
+# Add SDL3_ttf library
+#find_package(SDL3_ttf REQUIRED)
+#target_link_libraries(${PROJECT_NAME} SDL3::TTF)
 
-# Add SDL2_net library
-#find_package(SDL2_net REQUIRED)
-#target_link_libraries(${PROJECT_NAME} SDL2::Net)
+# Add SDL3_net library
+#find_package(SDL3_net REQUIRED)
+#target_link_libraries(${PROJECT_NAME} SDL3::Net)
 
-# Add SDL2_mixer library
-#find_package(SDL2_mixer REQUIRED)
-#target_link_libraries(${PROJECT_NAME} SDL2::Mixer)
+# Add SDL3_mixer library
+#find_package(SDL3_mixer REQUIRED)
+#target_link_libraries(${PROJECT_NAME} SDL3::Mixer)
 
-# Add SDL2_gfx library
-#find_package(SDL2_gfx REQUIRED)
-#target_link_libraries(${PROJECT_NAME} SDL2::GFX)
+# Add SDL3_gfx library
+#find_package(SDL3_gfx REQUIRED)
+#target_link_libraries(${PROJECT_NAME} SDL3::GFX)
 
